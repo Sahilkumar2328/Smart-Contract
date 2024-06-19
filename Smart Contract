@@ -1,0 +1,68 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SimpleBalanceContract {
+    uint256 public balance;
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // Function to simulate depositing an amount
+    function deposit(uint256 amount) public {
+        require(amount > 0, "Deposit amount must be greater than zero");
+        balance += amount;
+    }
+
+    // Function to simulate withdrawing an amount
+    function withdraw(uint256 amount) public {
+        require(msg.sender == owner, "Only the contract owner can withdraw");
+        require(balance >= amount, "Insufficient balance");
+        balance -= amount;
+    }
+
+    // Function to demonstrate the use of require statement
+    function requireExample(uint256 amount) public pure returns (string memory) {
+        require(amount > 0, "Amount must be greater than zero");
+        return "Require check passed!";
+    }
+
+    // Function to demonstrate the use of assert statement
+    function assertExample(uint256 a, uint256 b) public pure returns (uint256) {
+        uint256 result = a + b;
+        assert(result >= a && result >= b); // Ensure no overflow
+        return result;
+    }
+
+    // Function to demonstrate the use of revert statement
+    function revertExample(bool condition) public pure {
+        if (condition) {
+            revert("Condition triggered a revert");
+        }
+    }
+
+    // Function to demonstrate require, assert, and revert together
+    function demoAll(uint256 amount, bool condition) public {
+        // Require that the amount is greater than zero
+        require(amount > 0, "Amount must be greater than zero");
+
+        // Simulate some logic to use assert
+        uint256 calculatedValue = balance + amount;
+        assert(calculatedValue >= balance); // Ensure no overflow
+
+        if (condition) {
+            // Revert if condition is true
+            revert("Condition triggered a revert in demoAll");
+        }
+
+        // Update the balance as part of demo logic
+        balance += amount;
+    }
+
+    // Function to check if the sender is the owner
+    function onlyOwner() public view returns (string memory) {
+        require(msg.sender == owner, "Only the owner can call this function");
+        return "You are the owner";
+    }
+}
